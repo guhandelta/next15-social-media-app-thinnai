@@ -14,8 +14,8 @@ const NavBar = () => {
             </div>
 
             {/* Center */}
-            <div className="hidden md:flex w-[50%] text-sm">
-                <div className="flex gap-6 text-gray-600">
+            <div className="hidden md:flex w-[50%] text-sm items-center justify-between">
+                <div className="flex gap-6 text-gray-600 pt-2">
                     <Link href="/" className="flex gap-2">
                         <Image alt="home" src="/home.png" className="w-4 h-4" width={16} height={16} />
                         <span className="">Home</span>
@@ -28,6 +28,10 @@ const NavBar = () => {
                         <Image alt="stories" src="/stories.png" className="w-4 h-4 mt-1" width={16} height={16} />
                         <span className="">Stories</span>
                     </Link>
+                </div>
+                <div className="hidden xl:flex items-center p-2 bg-slate-100 rounded-xl">
+                    <input type="text" placeholder="search..." id="" className="bg-transparent outline-none" />
+                    <Image src='/search.png' alt="" width={14} height={14} />
                 </div>
             </div>
 
