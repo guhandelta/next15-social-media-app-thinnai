@@ -8,7 +8,7 @@ const MobileMenu = () => {
     !isOpen && console.log("Mobile Menu Closed");
     
     return (
-        <div className="">
+        <div className="md:hidden">
             <div 
                 className="flex flex-col gap-[4.5px] cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}
