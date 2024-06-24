@@ -23,7 +23,7 @@ const FriendRequests = () => {
     return (
         <div className="p-4 bg-white rounded-lg shadow-sm text-sm flex flex-col gap-4">
             {/* TOP */}
-            <div className="">
+            <div className="flex gap-3 justify-between">
                 <span className="text-gray-500">Friend Requests</span>
                 <Link href="" className="text-blue-500 text-sm">See More</Link>
             </div>
