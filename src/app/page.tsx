@@ -15,7 +15,7 @@ export default function Home() {
         </div>
       </div>
       <div className="hidden lg:block w-[35%]">
-        <RightMenu />
+        <RightMenu userId="123" />
       </div>
     </div>
   );

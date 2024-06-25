@@ -6,5 +6,7 @@ import Feed from './Feed';
 import FriendRequests from './FriendRequests';
 import Post from './Post';
 import Stories from './Stories';
+import UserInfoCard from './UserInfoCard';
+import UserMediaCard from './UserMediaCard';
 
-export { Ad, AddPost, Birthdays, Comments, Feed, FriendRequests, Post, Stories }
+export { Ad, AddPost, Birthdays, Comments, Feed, FriendRequests, Post, Stories, UserInfoCard, UserMediaCard }
