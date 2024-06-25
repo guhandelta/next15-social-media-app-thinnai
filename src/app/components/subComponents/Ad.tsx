@@ -1,6 +1,14 @@
 import Image from "next/image"
 
 const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
+    let icon, poster;
+    if(size === "sm"){
+        icon = "https://images.pexels.com/photos/1004584/pexels-photo-1004584.jpeg?auto=compress&cs=tinysrgb&w=800";
+        poster = "https://images.pexels.com/photos/386000/pexels-photo-386000.jpeg?auto=compress&cs=tinysrgb&w=800";
+    } else {
+        poster = "https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=800";
+        icon = "https://images.pexels.com/photos/3771824/pexels-photo-3771824.jpeg?auto=compress&cs=tinysrgb&w=800" 
+    }
     return (
         <div className="p-4 bg-white rounded-lg shadow-sm text-sm">
             {/* TOP */}
@@ -14,7 +22,7 @@ const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
                     "sm" ? "h-24" : size === "md" ? "h-36" : "h-48"
                 }`}>
                     <Image 
-                        src="https://images.pexels.com/photos/3771824/pexels-photo-3771824.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                        src={icon}
                         alt="" 
                         fill
                         className="rounded-lg object-cover"
@@ -22,7 +30,7 @@ const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
                 </div>
                 <div className="flex items-center gap-4">
                     <Image 
-                        src="https://images.pexels.com/photos/4450334/pexels-photo-4450334.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                        src={poster} 
                         alt="" 
                         width={24} 
                         height={24} 

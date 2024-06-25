@@ -8,5 +8,6 @@ import Post from './Post';
 import Stories from './Stories';
 import UserInfoCard from './UserInfoCard';
 import UserMediaCard from './UserMediaCard';
+import ProfileCard from './ProfileCard';
 
-export { Ad, AddPost, Birthdays, Comments, Feed, FriendRequests, Post, Stories, UserInfoCard, UserMediaCard }
+export { Ad, AddPost, Birthdays, Comments, Feed, FriendRequests, Post, Stories, UserInfoCard, UserMediaCard, ProfileCard }
