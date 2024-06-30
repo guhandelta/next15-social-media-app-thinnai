@@ -19,7 +19,7 @@ const LeftMenu = ({ type }: { type: "home" | "profile" }) => {
                 </Link>
                 <hr className="border-t-1 border-gray-50 w-36 self-center" />
                 <Link href="/" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
-                    <Image src="/marketa.png" alt='' width={20} height={20} />
+                    <Image src="/market.png" alt='' width={20} height={20} />
                     <span className="">Marketplace</span>
                 </Link>
                 <hr className="border-t-1 border-gray-50 w-36 self-center" />
