@@ -1,5 +1,5 @@
 import React from 'react'
-import { Ad, ProfileCard } from './subComponents'
+import { Ad, ProfileCard } from '../subComponents'
 import Image from 'next/image'
 import Link from 'next/link'
 
