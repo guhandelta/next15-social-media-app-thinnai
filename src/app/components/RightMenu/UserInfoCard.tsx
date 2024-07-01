@@ -4,6 +4,7 @@ import { User } from '@prisma/client';
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect } from 'react'
+import UserInfoCardInteraction from './UserInfoCardInteraction';
 
 const UserInfoCard = async ({ user }:{ user: User }) => {
 
@@ -19,7 +20,7 @@ const UserInfoCard = async ({ user }:{ user: User }) => {
     let isFollowing = false;
     let isFollowingSent = false;
 
-    const { userId: currentUserId } = auth();
+    const { userId: currentUserId } =  auth();
 
     if(currentUserId){
         const blockStatusResponse = await prisma.block.findFirst({
@@ -93,8 +94,13 @@ const UserInfoCard = async ({ user }:{ user: User }) => {
                     <span className="">Joined on: {formattedDate}</span>
                 </div>
             </div>
-            <button className="bg-blue-200 h-8 hover:bg-blue-500 text-white text-sm rounded-md">Follow</button>
-            <span className="bg-red-100 p-2 rounded-md hover:bg-red-500 hover:text-white self-end text-xs cursor-pointer">Block User</span>
+            <UserInfoCardInteraction 
+                userId={user.id}
+                currentUserId={currentUserId ?? ''}
+                isBlocked={isBlocked}
+                isFollowing={isFollowing}
+                isFollowingSent={isFollowingSent}
+            />
         </div>
     )
 }
