@@ -39,7 +39,7 @@ export const handleFollow = async (userId: string) =>{
                     }
                 });
             } else {
-                // The current user is not being followed and a request was not already sent, send a request
+                // If the current user is not being followed and a request was not already sent, send a request
                 await prisma.followRequest.create({
                     data: {
                         senderId: currentUserId,
@@ -51,5 +51,38 @@ export const handleFollow = async (userId: string) =>{
     } catch (error) {
         console.log(error);
         throw new Error("Something went wrong!!")
+    }
+}
+
+export const handleBlock = async (userId: string) => {
+    const { userId: currentUserId } = auth();
+
+    if(!currentUserId) throw new Error("User is not Authenticated!!");
+
+    try{
+        const existingBlock = await prisma.block.findFirst({
+            where:{
+                blockerId: currentUserId,
+                blockedId: userId
+            }
+        });
+
+        if(existingBlock){
+            await prisma.block.delete({
+                where:{
+                    id: existingBlock.id
+                }
+            });
+        } else {
+            // If the current user is not being followed and a request was not already sent, send a request
+            await prisma.block.create({
+                data: {
+                    blockerId: currentUserId,
+                    blockedId: userId
+                }
+            });
+        }
+    } catch(err){
+        console.log(`Error:\t ${err}`);
     }
 }
