@@ -58,7 +58,7 @@ export const handleBlock = async (userId: string) => {
     const { userId: currentUserId } = auth();
 
     if(!currentUserId) throw new Error("User is not Authenticated!!");
-
+    
     try{
         const existingBlock = await prisma.block.findFirst({
             where:{
@@ -66,7 +66,7 @@ export const handleBlock = async (userId: string) => {
                 blockedId: userId
             }
         });
-
+        
         if(existingBlock){
             await prisma.block.delete({
                 where:{
@@ -84,5 +84,66 @@ export const handleBlock = async (userId: string) => {
         }
     } catch(err){
         console.log(`Error:\t ${err}`);
+    }
+}
+
+export const acceptFollowRequest = async (userId: string) => {
+    const { userId: currentUserId } = auth();
+    
+    if(!currentUserId) throw new Error("User is not Authenticated!!");
+
+    try {
+        const existingFolloweRequest = await prisma.followRequest.findFirst({
+            where:{
+                senderId: userId,
+                receiverId: currentUserId
+            }
+        });
+    
+        if(existingFolloweRequest){
+            await prisma.followRequest.delete({
+                where:{
+                    id: existingFolloweRequest.id
+                }
+            });
+        }
+    
+        await prisma.follower.create({
+            data:{
+                followerId: userId,
+                followingId: currentUserId
+            }
+        });
+        
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        throw new Error("Something went wrong!");
+    }
+}
+
+export const rejectFollowRequest = async (userId: string) => {
+    const { userId: currentUserId } = auth();
+    
+    if(!currentUserId) throw new Error("User is not Authenticated!!");
+
+    try {
+        const existingFolloweRequest = await prisma.followRequest.findFirst({
+            where:{
+                senderId: userId,
+                receiverId: currentUserId
+            }
+        });
+    
+        if(existingFolloweRequest){
+            await prisma.followRequest.delete({
+                where:{
+                    id: existingFolloweRequest.id
+                }
+            });
+        }
+    
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        throw new Error("Something went wrong!");
     }
 }

@@ -51,7 +51,8 @@ const UserInfoCard = async ({ user }:{ user: User }) => {
         followRequestStatusResponse ? (isFollowingSent = true) : (isFollowingSent = false);
     }
 
-    console.log("User Info: ", user)
+    console.log("User Info: ", user.id)
+    console.log("Current User Info: ", currentUserId)
 
     return (
         <div className="p-4 bg-white rounded-lg shadow-sm text-sm flex flex-col gap-4">
@@ -94,7 +95,7 @@ const UserInfoCard = async ({ user }:{ user: User }) => {
                     <span className="">Joined on: {formattedDate}</span>
                 </div>
             </div>
-            {(!currentUserId && currentUserId !== user.id) && <UserInfoCardInteraction 
+            {(currentUserId && currentUserId !== user.id) && <UserInfoCardInteraction 
                 userId={user.id}
                 isBlocked={isBlocked}
                 isFollowing={isFollowing}
