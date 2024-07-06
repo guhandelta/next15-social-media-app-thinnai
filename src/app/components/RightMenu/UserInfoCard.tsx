@@ -3,8 +3,8 @@ import { auth } from '@clerk/nextjs/server';
 import { User } from '@prisma/client';
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect } from 'react'
 import UserInfoCardInteraction from './UserInfoCardInteraction';
+import UpdateUser from './UpdateUser';
 
 const UserInfoCard = async ({ user }:{ user: User }) => {
 
@@ -59,7 +59,7 @@ const UserInfoCard = async ({ user }:{ user: User }) => {
             {/* TOP */}
             <div className="flex gap-3 justify-between">
                 <span className="text-gray-500">User Information</span>
-                <Link href="" className="text-blue-500 text-sm">See More</Link>
+                {currentUserId === user.id ? (<UpdateUser user={user} />) : <Link href="/" className="text-blue-500 text-sm">See More</Link>}
             </div>
             {/* BOTTOM */}
             <div className="flex flex-col gap-4 text-gray-500">

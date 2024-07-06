@@ -147,3 +147,15 @@ export const rejectFollowRequest = async (userId: string) => {
         throw new Error("Something went wrong!");
     }
 }
+
+export const updateProfile = async (formData: FormData) =>{
+
+    console.log("updateProfile Entry");
+
+    console.log("\nForm Data:\t", Object.fromEntries(formData));
+    
+    const data = Object.fromEntries(formData);
+    
+    console.log("updateProfile Exit");
+    
+}
