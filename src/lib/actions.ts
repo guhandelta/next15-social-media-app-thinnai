@@ -1,6 +1,7 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "./client";
+import { z } from "zod";
 
 
 export const handleFollow = async (userId: string) =>{
@@ -150,12 +151,53 @@ export const rejectFollowRequest = async (userId: string) => {
 
 export const updateProfile = async (formData: FormData) =>{
 
-    console.log("updateProfile Entry");
-
     console.log("\nForm Data:\t", Object.fromEntries(formData));
     
     const data = Object.fromEntries(formData);
-    
-    console.log("updateProfile Exit");
+
+    const stringz = z.string();
+
+    const profile = z.object({
+        cover: stringz.optional(),
+        name: stringz.max(60).optional(),
+        surname: stringz.max(60).optional(),
+        description: stringz.max(60).optional(),
+        city: stringz.max(60).optional(),
+        school: stringz.max(60).optional(),
+        work: stringz.max(60).optional(),
+        website: stringz.max(60).optional(),
+    });
+
+    const validateFields = profile.safeParse(data);
+
+    if(!validateFields.success) {
+        console.log(validateFields.error.flatten().fieldErrors);
+        return "err";
+    }
+
+    const filteredValues = Object.fromEntries(
+        // Filter out and don't push the values with empty string "" into the filteredValues[]
+        Object.entries(data).filter(
+            // This is to prevent the field data to be updated with placeholder data, when the data for that field was not provided during the update{if no data was provided, it reach the db as an empty string ""}
+            // PS:  The underscore (_) is used as a placeholder for the key part of the pair, indicating that the key is not used in the filter condition. This is a common convention in programming when a variable is required syntactically but not used.
+            ([_, value]) => value !== ""
+        )
+    );
+
+    const { userId } = auth();
+
+    if(!userId) return "err";
+
+    try {
+        await prisma.user.update({
+            where:{
+                id: userId
+            },
+            data: validateFields.data
+        });
+    } catch (error) {
+        console.log(error);
+        
+    }
     
 }
