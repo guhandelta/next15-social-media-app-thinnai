@@ -149,7 +149,7 @@ export const rejectFollowRequest = async (userId: string) => {
     }
 }
 
-export const updateProfile = async (formData: FormData) =>{
+export const updateProfile = async (formData: FormData, cover: string) =>{
 
     console.log("\nForm Data:\t", Object.fromEntries(formData));
     
@@ -168,7 +168,8 @@ export const updateProfile = async (formData: FormData) =>{
         website: stringz.max(60).optional(),
     });
 
-    const validateFields = profile.safeParse(data);
+    // Spread all the fields and pass in the cover image along with it
+    const validateFields = profile.safeParse({ cover, ...data});
 
     if(!validateFields.success) {
         console.log(validateFields.error.flatten().fieldErrors);
