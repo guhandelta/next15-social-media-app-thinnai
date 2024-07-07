@@ -149,9 +149,13 @@ export const rejectFollowRequest = async (userId: string) => {
     }
 }
 
-export const updateProfile = async (formData: FormData, cover: string) =>{
+export const updateProfile = async (
+    prevState: { success: boolean, error: boolean }, 
+    payload: { formData: FormData, cover: string }
+) => {
 
-    console.log("\nForm Data:\t", Object.fromEntries(formData));
+    const { cover, formData } = payload;
+    console.log("\nForm Data:\t", Object.fromEntries(formData)); 
     
     const data = Object.fromEntries(formData);
 
@@ -170,12 +174,13 @@ export const updateProfile = async (formData: FormData, cover: string) =>{
 
     // Spread all the fields and pass in the cover image along with it
     const validateFields = profile.safeParse({ cover, ...data});
+    
 
     if(!validateFields.success) {
         console.log(validateFields.error.flatten().fieldErrors);
-        return "err";
+        return { success: false, error: true };
     }
-
+    
     const filteredValues = Object.fromEntries(
         // Filter out and don't push the values with empty string "" into the filteredValues[]
         Object.entries(data).filter(
@@ -184,11 +189,11 @@ export const updateProfile = async (formData: FormData, cover: string) =>{
             ([_, value]) => value !== ""
         )
     );
-
+    
     const { userId } = auth();
-
-    if(!userId) return "err";
-
+    
+    if(!userId) return { success: false, error: true };
+    
     try {
         await prisma.user.update({
             where:{
@@ -196,9 +201,10 @@ export const updateProfile = async (formData: FormData, cover: string) =>{
             },
             data: validateFields.data
         });
+        return { success: true, error: false };
     } catch (error) {
         console.log(error);
-        
+        return { success: false, error: true };
     }
     
 }
