@@ -5,6 +5,7 @@ import { User } from '@prisma/client';
 import { updateProfile } from '@/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
+import UpdateButton from './UpdateButton';
 
 const UpdateUser = ({ user }: { user: User }) => {
     
@@ -116,7 +117,7 @@ const UpdateUser = ({ user }: { user: User }) => {
                                 <input name="website" type="text" placeholder={user.website || 'Kandha'} id="" className='ring-1 ring-gray-300 p-[13px] rounded-md text-sm' />
                             </div>
                         </div>
-                        <button className="bg-blue-500 p-2 mt-2 rounded-md text-white">Update</button>
+                        <UpdateButton />
                         {state.success && <div className="text-green-500">Profile Updated</div>}
                         {state.error && <div className="text-red-500">Error Updating Profile</div>}
                         <div 
