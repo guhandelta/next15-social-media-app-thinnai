@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import Comments from './Comments'
 import { Post as PostType, User } from '@prisma/client';
+import PostInteraction from './PostInteraction';
 
 type FeedPostType = PostType & { user: User } & { _count: { comments: number } } & { likes: [{ userId: string }] };
 
@@ -42,40 +43,8 @@ const Post = ({ post }: { post: FeedPostType }) => {
                 <p>{post?.desc}</p>
             </div>
             {/* Interaction */}
-            <div className="flex items-center justify-between">
-                <div className="flex gap-8">
-                    <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
-                        <Image src="/like.png" alt='like' width={16} height={16} className="cursor-pointer"></Image>
-                        <span className="text-gray-300">|</span>
-                        <span className="text-gray-500">{post?.likes} &nbsp;
-                            <span className="hidden md:inline">
-                                Likes
-                            </span>
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
-                        <Image src="/comment.png" alt='like' width={16} height={16} className="cursor-pointer"></Image>
-                        <span className="text-gray-300">|</span>
-                        <span className="text-gray-500">{post?._count}&nbsp;
-                            <span className="hidden md:inline">
-                                Comments
-                            </span>
-                        </span>
-                    </div>
-                </div>
-                <div className="">
-                    <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
-                        <Image src="/share.png" alt='like' width={16} height={16} className="cursor-pointer"></Image>
-                        <span className="text-gray-300">|</span>
-                        <span className="text-gray-500">24 &nbsp;
-                            <span className="hidden md:inline">
-                                Shares
-                            </span>
-                        </span>
-                    </div>
-                    
-                </div>
-            </div>
+            {/* Likes[] has userId, which cannot be assigned to likes[], so get rid of these userId's and take only strings */}
+            <PostInteraction postId={post?.id} likes={post?.likes.map(like => like.userId)} commentsCount={post?._count.comments} />
             <Comments />    
         </div>
     )
