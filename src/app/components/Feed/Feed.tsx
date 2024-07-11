@@ -7,7 +7,7 @@ const Feed = async ({ username }: { username: string }) => {
 
     const { userId } = auth();
 
-    let posts:any = [];
+    let posts:any[] = [];
 
     if(username){
         // Fetch all the posts of the user
@@ -36,6 +36,7 @@ const Feed = async ({ username }: { username: string }) => {
         });
     }
 
+    // The user is in the homepage
     if(!username && userId){
         const following = await prisma.follower.findMany({
             where: {
@@ -79,10 +80,8 @@ const Feed = async ({ username }: { username: string }) => {
     return (
         <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12">
             {
-                posts.length 
-                    ? 
-                        (posts.map((post) => (
-                            <Post key={post.id} post={post.post} />
+                posts.length ? (posts.map((post) => (
+                            <Post key={post.id} post={post} />
                         ))) 
                     : 
                         "No posts found"

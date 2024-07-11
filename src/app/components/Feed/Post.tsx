@@ -45,7 +45,7 @@ const Post = ({ post }: { post: FeedPostType }) => {
             {/* Interaction */}
             {/* Likes[] has userId, which cannot be assigned to likes[], so get rid of these userId's and take only strings */}
             <PostInteraction postId={post?.id} likes={post?.likes.map(like => like.userId)} commentsCount={post?._count.comments} />
-            <Comments />    
+            <Comments postId={post?.id} />    
         </div>
     )
 }

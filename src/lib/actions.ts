@@ -209,6 +209,30 @@ export const updateProfile = async (
     
 }
 
+export const addComment = async (postId: number, desc: string) => {
+    const { userId } = auth();
+
+    if(!userId) throw new Error("User is not authenticated!!");
+
+    try {
+        // createdComment would be used to update the UI
+        const createdComment = await prisma.comment.create({
+            data:{
+                desc,
+                postId,
+                userId
+            },
+            include:{
+                user: true
+            }
+        });
+        return createdComment;
+    } catch (error) {
+        console.log(`Error:${error}`);
+        throw new Error("Sorry! something went wrong")
+    }
+
+}
 export const switchLike = async (postId: number) => {
     const { userId } = auth();
 
