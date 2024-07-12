@@ -1,14 +1,18 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { Suspense } from 'react'
 import Comments from './Comments'
 import { Post as PostType, User } from '@prisma/client';
 import PostInteraction from './PostInteraction';
+import PostInfo from './PostInfo';
+import { auth } from '@clerk/nextjs/server';
 
 type FeedPostType = PostType & { user: User } & { _count: { comments: number } } & { likes: [{ userId: string }] };
 
 const Post = ({ post }: { post: FeedPostType }) => {
     console.log("Post: ", post);
     console.log("Post User: ", post?.user);
+
+    const { userId } = auth();
     
     return (
         <div className="flex flex-col gap-4">
@@ -28,7 +32,8 @@ const Post = ({ post }: { post: FeedPostType }) => {
                             : post?.user.username
                     }</span>
                 </div>
-                <Image src="/more.png" alt='User' width={16}height={16} />
+                {/* Checking the request to the server action to see if the post belongs to the current user, to provide the ability to delete the` post */}
+                {userId === post.user.id && <PostInfo postId={post?.id} />}
             </div>
             {/* Description */}
             <div className="flex flex-col gap-4">
@@ -44,8 +49,12 @@ const Post = ({ post }: { post: FeedPostType }) => {
             </div>
             {/* Interaction */}
             {/* Likes[] has userId, which cannot be assigned to likes[], so get rid of these userId's and take only strings */}
-            <PostInteraction postId={post?.id} likes={post?.likes.map(like => like.userId)} commentsCount={post?._count.comments} />
-            <Comments postId={post?.id} />    
+            <Suspense fallback={<div>Loading...</div>}> 
+                <PostInteraction postId={post?.id} likes={post?.likes.map(like => like.userId)} commentsCount={post?._count.comments} />
+            </Suspense>
+            <Suspense fallback={<div>Loading...</div>}> 
+                <Comments postId={post?.id} />    
+            </Suspense>
         </div>
     )
 }
