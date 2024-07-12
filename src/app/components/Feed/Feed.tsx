@@ -55,7 +55,7 @@ const Feed = async ({ username }: { username: string }) => {
         posts = await prisma.post.findMany({
             where: {
                 userId: {
-                    in: Ids // followingIds
+                    in: Ids // followingIds + curentUserId
                 }
             },
             orderBy:{
