@@ -1,13 +1,18 @@
 'use client';
-import { useAuth } from '@clerk/nextjs'
+import { addPost } from '@/lib/actions';
+import { useUser } from '@clerk/nextjs'
+import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import AddPostButton from './AddPostButton';
 
 const AddPost = () => {
 
-  const { userId } = useAuth();
+  const { user, isLoaded } = useUser();
+  const [desc, setDesc] = useState("");
+  const [img, setImg] = useState<any>("");
 
-  useEffect(() => console.log("UserId:\t",userId), [])
+  if(!isLoaded) return 'Loading...';  
 
   const testAction = () => {
 
@@ -17,37 +22,56 @@ const AddPost = () => {
     <div className="p-4  bg-white shadow-md rounded-lg flex gap-4 justify-between text-sm">
       {/* AVATAR */}
       <Image
-        src="https://images.pexels.com/photos/1387037/pexels-photo-1387037.jpeg?auto=compress&cs=tinysrgb&w=800"
+        src={user?.imageUrl || "/noAvatar.png"} 
         alt=""
         width={48}
         height={48}
         className='w-12 h-12 rounded-full object-cover'
-        />
+      />
       {/* POST */}
       <div className=" flex-1">
         {/* TEXT INPUT */}
-        <form className="flex gap-4">
-          <textarea className='flex-1 p-2 rounded-lg bg-slate-100' placeholder='What is on your mind?'></textarea>
-          <Image 
-            src="/emoji.png"
-            alt=""
-            width={20}
-            height={20}
-            className='w-5 h-5 cursor-pointer self-end'
-          />
-        </form>
-        {/* POST OPTIONS */}
-        <div className="flex items-center gap-4 mt-4 text-gray-400 flex-wrap">
-          <div className="flex items-center gap-2 cursor-pointer">
+        <form action={formData => addPost(formData, img?.secure_url || "")} className="flex gap-4">
+          <textarea 
+            className='flex-1 p-2 rounded-lg bg-slate-100' 
+            placeholder='What is on your mind?'
+            name="desc"
+            onChange={(e) => setDesc(e.target.value)}
+          ></textarea>
+          <div className="flex flex-col h-full items-center border-black">
             <Image 
-              src="/addImage.png"
+              src="/emoji.png"
               alt=""
               width={20}
               height={20}
-              className='w-5 h-5'
+              className=' w-5 h-5 cursor-pointer self-end'
             />
-            <span>Photo</span>
+            <AddPostButton />
           </div>
+        </form>
+        {/* POST OPTIONS */}
+        <div className="flex items-center gap-4 mt-4 text-gray-400 flex-wrap">
+          <CldUploadWidget 
+            uploadPreset="social"  
+            onSuccess={(result,{ widget }) => {
+              setImg(result.info);  
+            }}>
+                {({ open, close }) => {
+                    return (
+                      <div className="flex items-center gap-2 cursor-pointer" onClick={() => open()}>
+                        <p className="" onClick={() => close()}>x</p>
+                        <Image 
+                          src="/addImage.png"
+                          alt=""
+                          width={20}
+                          height={20}
+                          className='w-5 h-5'
+                        />
+                        <span>Photo</span>
+                      </div>
+                    );
+                }}
+          </CldUploadWidget>
           <div className="flex items-center gap-2 cursor-pointer">
             <Image 
               src="/addVideo.png"
